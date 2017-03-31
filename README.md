@@ -46,5 +46,5 @@ psql -U postgres -f sql/create.sql
 ### Pour se connecter à la BD "projet"
 psql -U postgres projet
 
-###Pour faire un refresh de ressources sans devoir tout partir à noveau
+### Pour faire un refresh de ressources sans devoir tout partir à noveau
 mvn compile (dans un nouvel onglet du terminal)
