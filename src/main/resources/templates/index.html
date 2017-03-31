@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <title>Food Trucks and Bikes locator</title>
+</head>
+<body onload="queryOnloadFavoritesFoodTrucks()">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <p class="navbar-brand">Food Trucks and Bikes Locator</p>
+        </div>
+    </div>
+</nav>
+<!-- Fin navbar -->
+<!-- Container principal -->
+<div class="container-fluid containerset">
+    <!-- La carte -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="map"></div>
+        </div>
+    </div>
+    <!-- Fin La carte -->
+    <!-- Choix dates + Affichage des messages -->
+    <div class="row">
+        <!-- Panneau qui permet la saisie des dates -->
+        <div class="col-sm-3">
+            <div class="formulaire">
+                <h3>Saisir vos dates</h3>
+            </div>
+            <div>
+                <div class="jumbotron jumbotronset formulaire area_size">
+                    <form class="form">
+                        <div class="form-group">
+                            <label for="start_date">Date de début</label><br/>
+                            <input type="date" ata-date-inline-picker="true" id="start_date"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="end_date">Date de fin</label><br/>
+                            <input type="date" ata-date-inline-picker="true" id="end_date"/>
+                        </div>
+                        <br/>
+                        <button type="submit" class="btn btn-default" id="btn_search_dates">Recherche
+                        </button>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <!-- Fin Panneau qui permet la saisie des dates -->
+
+        <!-- Panneau qui permet le choix des options -->
+        <div class="col-sm-6">
+            <div class="formulaire">
+                <h3>Choix des options</h3>
+            </div>
+            <div>
+                <div class="jumbotron jumbotronset area_size">
+                    <!--<div id="bike_layer_display">-->
+
+                    <div class="container jumbotron jumbotronset fd-option-color-01">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>
+                                    <input type="checkbox" name="bike_propertie" value="bike_station_layer"
+                                           id="bike_station_layer_check" checked=" "/> Affichage des stations de vélos
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <div>
+                                    <input type="checkbox" name="bike_propertie" value="bike_rack_layer"
+                                           id="bike_rack_layer_check" checked=" "/> Affichage des arceaux à vélos
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h5>Choix des food trucks préférés</h5>
+                                <!--reference:  https://silviomoreto.github.io/bootstrap-select/ -->
+                                <select class="selectpicker" data-width="275px" multiple="multiple"
+                                        data-actions-box="true" data-size="5" id="pickerFavoritesFoodTrucks">
+                                </select>
+                                <button type="button" class="btn btn-default btn-sm btn-update"
+                                        id="btn_deleteFavoritesFoodTrucks">Supprimer
+                                </button>
+                            </div>
+                            <div class="col-xs-6">
+                                <h5>Liste des food trucks disponibles</h5>
+                                <select class="selectpicker" data-width="275px" multiple="multiple"
+                                        data-actions-box="true" data-size="5" id="pickerAllFoodTrucks">
+                                </select>
+                                <button type="button" class="btn btn-default btn-sm btn-update"
+                                        id="btn_insertFavoritesFoodTrucks">Ajouter aux
+                                    food
+                                    trucks préférés
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Fin Panneau qui permet le choix des options -->
+
+        <!-- Panneau qui permet les affichages -->
+        <div class="col-sm-3 ">
+            <div>
+                <h3>Tableau d'affichage</h3>
+                <div class="jumbotron jumbotronset areaset area_size" id="informations-board">
+                    <p id="p_info_1"> ... </p>
+                </div>
+            </div>
+        </div>
+        <!-- Fin Panneau qui permet les affichages -->
+    </div>
+    <!-- Fin Choix dates + Affichages -->
+</div>
+<!-- Fin du container principal -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="vendor/jquery/jquery-2.2.3.min.js"></script>
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<script type="text/javascript" src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Datepicker -->
+<script type="text/javascript" src="vendor/calendar/bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="vendor/calendar/bower_components/moment/locale/fr-ca.js"></script>
+<script type="text/javascript"
+        src="vendor/calendar/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
+<script type="text/javascript" src="js/utilities.js"></script>
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/js/bootstrap-select.min.js"></script>
+
+</body>
+</html>
